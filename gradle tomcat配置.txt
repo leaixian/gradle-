@@ -1,0 +1,41 @@
+gradle tomcat插件的使用
+首先在build.gradle中添加如下代码：
+buildscript {
+    repositories {
+        jcenter()
+    }
+ 
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.1'
+    }
+}
+ 
+subprojects {
+   apply plugin : "java"
+   repositories {
+      mavenCentral()
+   }
+}
+然后在子工程的build.gradle文件中添加tomcat插件
+apply plugin: "war"
+apply plugin: 'com.bmuschko.tomcat'
+
+dependencies {
+   providedCompile "javax:javaee-api:6.0"
+ 
+   def tomcatVersion = '7.0.59'
+   tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+    "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+      "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+}
+ 
+tomcat {
+    httpPort = 8080
+    httpsPort = 8091
+    enableSSL = true
+}
+最后构建运行工程：
+gradle build
+gradle tomcatRunWar
+参考网址：
+https://my.oschina.net/yushulx/blog/401888
